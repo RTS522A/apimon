@@ -5,13 +5,15 @@ jobs:
   mingw64-gcc:
     name: MinGW GCC
 
-    runs-on: windows-2019
-
+    runs-on: windows-2022
     defaults:
       run:
         shell: bash
 
     steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
       - name: "Setup"
         run: |
           make
