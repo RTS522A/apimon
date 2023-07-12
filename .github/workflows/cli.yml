@@ -1,0 +1,32 @@
+name: Artifacts (Package)
+on:
+  workflow_dispatch:
+jobs:
+  artifacts-mingw-w64:
+    runs-on: ubuntu-20.04
+
+    steps:
+    - name: Checkout code
+      id: checkout-code
+      uses: actions/checkout@v3
+      with:
+        submodules: recursive
+        fetch-depth: 0
+
+    - name: Setup problem matcher
+      uses: Joshua-Ashton/gcc-problem-matcher@v2
+
+    - name: Build release
+      id: build-release
+      uses: Joshua-Ashton/arch-mingw-github-action@v8
+      with:
+        command: |
+          make
+
+    - name: Upload artifacts
+      id: upload-artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: apimon
+        path: build
+        if-no-files-found: error
