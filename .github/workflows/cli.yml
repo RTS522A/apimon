@@ -2,31 +2,25 @@ name: Artifacts (Package)
 on:
   workflow_dispatch:
 jobs:
-  artifacts-mingw-w64:
-    runs-on: ubuntu-20.04
+  mingw64-gcc:
+    name: MinGW GCC
+
+    runs-on: windows-2019
+
+    defaults:
+      run:
+        shell: bash
 
     steps:
-    - name: Checkout code
-      id: checkout-code
-      uses: actions/checkout@v3
-      with:
-        submodules: recursive
-        fetch-depth: 0
-
-    - name: Setup problem matcher
-      uses: Joshua-Ashton/gcc-problem-matcher@v2
-
-    - name: Build release
-      id: build-release
-      uses: Joshua-Ashton/arch-mingw-github-action@v8
-      with:
-        command: |
+      - name: "Setup"
+        run: |
           make
 
-    - name: Upload artifacts
-      id: upload-artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: apimon
-        path: build
-        if-no-files-found: error
+
+      - name: Upload artifacts
+        id: upload-artifacts
+        uses: actions/upload-artifact@v3
+        with:
+         name: apimon
+         path: build
+         if-no-files-found: error
