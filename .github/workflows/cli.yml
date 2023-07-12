@@ -19,7 +19,7 @@ jobs:
         wget https://bootstrap.pypa.io/pip/2.7/get-pip.py
         sudo apt-get install python-pip
         pip2 install docutils jinja2 pyyaml
-        CC=x86_64-w64-mingw32-gcc CXX=x86_64-w64-mingw32-g++ CFLAGS="-Werror -O1" make
+        make all
 
 
 
