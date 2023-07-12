@@ -2,27 +2,30 @@ name: Artifacts (Package)
 on:
   workflow_dispatch:
 jobs:
-  mingw64-gcc:
-    name: MinGW GCC
 
-    runs-on: windows-2022
-    defaults:
-      run:
-        shell: bash
 
+  mingw-cross-compilation:
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-        with:
+    - uses: actions/checkout@v3
+      with:
           submodules: 'recursive'
-      - name: "Setup"
-        run: |
-          make
+    - uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # tag=v3
+    - name: mingw cross-compilation
+      run: |
+        # sudo update-alternatives --set x86_64-w64-mingw32-g++ /usr/bin/x86_64-w64-mingw32-g++-posix; (doesn't work)
+        sudo apt-get -qqq update
+        sudo apt-get install gcc-mingw-w64
+        CC=x86_64-w64-mingw32-gcc CXX=x86_64-w64-mingw32-g++ CFLAGS="-Werror -O1" make
 
 
-      - name: Upload artifacts
-        id: upload-artifacts
-        uses: actions/upload-artifact@v3
-        with:
+
+
+
+    - name: Upload artifacts
+      id: upload-artifacts
+      uses: actions/upload-artifact@v3
+      with:
          name: apimon
          path: build
          if-no-files-found: error
